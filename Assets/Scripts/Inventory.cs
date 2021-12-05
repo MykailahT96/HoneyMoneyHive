@@ -5,46 +5,54 @@ using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
-    public HiveSpawner HiveSpawnerScript;
-    public static int currentGold = 300;
-    public static int currentHoney = 0;
-    public static int totalBees = 3;
-    public static int hiveCapacity = 5;
-    public Text moneyText;
+    //[Serializable]
+    public int currentHoney = 0;
     public Text honeyText;
-    public Text hiveText;
-    public int beePrice = 0;
-    public Button buyButton;
+    public int upgradePrice = 0;
+    public Ammo ammoScript;
 
     void Start()
     {
-        //moneyText.text = ("$ " + currentGold.ToString());
-       //honeyText.text = (currentHoney.ToString() + " kg");
-        //hiveText.text = (totalBees.ToString() + " / " + hiveCapacity.ToString());
-
+        PlayerPrefs.SetInt("totalHoney", currentHoney);
+    
     }
 
     // Update is called once per frame
     void Update()
     {
-        moneyText.text = ("$ " + currentGold.ToString());
-        honeyText.text = (currentHoney.ToString() + " kg");
-        hiveText.text = (totalBees.ToString() + " / " + hiveCapacity.ToString());
+        honeyText.text = (PlayerPrefs.GetInt("totalHoney").ToString() + " kg");
     }
 
-    public void PurchaseBee()
+    public void UpgradeAmmo(Button button)
     {
-        if(buyButton.tag == "WoBee01")
+        if(button.tag == "BU01")
         {
             Debug.Log("Button pressed");
-            beePrice = 300;
-            if(currentGold >= beePrice)
+            upgradePrice = 100;
+            if(currentHoney >= upgradePrice)
             {
-                currentGold = currentGold - beePrice;
-                totalBees++;
-                HiveSpawnerScript.SpawnBee();
-                Debug.Log("Bought bee");
+                //ammoDamage = ammoDamage + 5;
+                currentHoney = currentHoney - upgradePrice;
+                PlayerPrefs.SetInt("totalHoney", currentHoney);
+                ammoScript.UpgradeDamage(5);
+                Debug.Log("Increased ammo damage: +5");
             }
         }
+    }
+
+    public void AddHoney(int honeyAmount)
+    {
+        currentHoney = currentHoney + honeyAmount;
+        PlayerPrefs.SetInt("totalHoney", currentHoney);
+    }
+
+    public void UpgradeFlower()
+    {
+
+    }
+
+    public void UpgradeTower()
+    {
+
     }
 }

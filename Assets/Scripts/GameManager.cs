@@ -10,42 +10,32 @@ public class GameManager : MonoBehaviour
     public GameObject pauseMenuUI;
 
     bool MarketWindowActive = false;
+    public static bool GameIsPaused = false;
+    public GameObject bee;
 
+    void Start()
+    {
+        
+    }
     public void OpenMarketWindow()
     {
-        //if else? maybe case 
-        //marketWindowUI.SetActive(true);
-        //Debug.Log("Opened market.");
+        
         if(MarketWindowActive == false) 
         {
             marketWindowUI.SetActive(true);
             Debug.Log("Opened market");
             MarketWindowActive = true;
+            Time.timeScale = 0f;
         }
         else
         {
             marketWindowUI.SetActive(false);
             Debug.Log("Closed market");
             MarketWindowActive = false;
+            Time.timeScale = 1f;
         }
     }
-}
-
-/* 
-if(marketWindowUI.SetActive() == false)
-{
-    marketWindowUI.SetActive(true);
-    Debug.Log("Opened market");
-}
-else
-{
-    marketWindowUI.SetActive(false);
-    Debug.Log("Closed market");
-}
-
-public static bool GameIsPaused = false;
-
-void Update()
+    void Update()
     {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
@@ -67,11 +57,36 @@ void Update()
         GameIsPaused = false;
     }
 
-    void Pause()
+    public void Pause()
     {
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
         GameIsPaused = true;
     }
+
+    public void StartGame()
+    {
+        SceneManager.LoadScene("MainGameScene");//game scene
+    }
+
+    public void GameOver()
+    {
+        SceneManager.LoadScene("EndGameScene");
+    }
+    
+    public void ExitGame()
+    {
+        Debug.Log("Quit");
+        Application.Quit();
+    }
+
+    public void ReturnToMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
+}
+
+/* 
+
 
 */

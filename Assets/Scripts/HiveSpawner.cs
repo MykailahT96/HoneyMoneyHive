@@ -4,18 +4,37 @@ using UnityEngine;
 
 public class HiveSpawner : MonoBehaviour
 {
-   public GameObject bee;
-
-   public Transform hiveLocation;
+   //public GameObject bee;
+   public GameObject waspPrefab;
+   public Transform[] enemySpawnPoints;
+   public float enemySpawnTimer = 15f;
+   public float spawnDelay = 15f;
 
    
-   public void SpawnBee()
+   void Start()
    {
-       Instantiate(bee, hiveLocation.position, hiveLocation.rotation);
+       
+   }
+
+   
+   public void SpawnWasp()
+   {
+       int randomIndex = Random.Range(0,enemySpawnPoints.Length);
+       Transform spawnPoint = enemySpawnPoints[randomIndex];
+
+       Instantiate(waspPrefab,spawnPoint.position, spawnPoint.rotation);
    }
 
     void Update()
     {
-        
+        if(enemySpawnTimer > 0)
+        {
+            enemySpawnTimer -= Time.deltaTime;
+        }
+        else
+        {
+            SpawnWasp();
+            enemySpawnTimer += spawnDelay;
+        }
     }
 }

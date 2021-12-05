@@ -7,58 +7,81 @@ public class FlowerSpawner : MonoBehaviour
 {
     //public float spawnDelay = .3f;
 
-    public GameObject flower;
-    public Transform spawnPoint;
-    //public Text flowerText;
-    public GameObject flowerValueText;
-    public int flowerValue = 0;
+    public GameObject flower; //flower prefab
+    public Transform[] spawnPoints; //flower spawnpoint
+    public GameObject flowerValueText; //text prefab
+    public Canvas canvas;
+    //public GameObject flowerObj;
+    public Camera camera1;
+    public RectTransform canvas1;
+    //public RectTransform flowerText;
+    public Vector2 flowerPosition;
     
-    //float nextTimeToSpawn = 0f;
+
+    public float spawnDelay = 10f;
+    float nextTimeToSpawn = 0f;
 
     void Start()
     {
+        
+        
 
-        SpawnFlower();
-        SpawnText();
+    }
 
+    void Update()
+    {
+        if(nextTimeToSpawn > 0)
+        {
+            nextTimeToSpawn -= Time.deltaTime;
+        }
+        else
+        {
+            SpawnFlower();
+            nextTimeToSpawn = Time.time + spawnDelay;
+        }
     }
 
     void SpawnFlower()
     {
-        //int randomIndex = Random.Range(0,spawnPoints.Length);
-        //Transform spawnPoint = spawnPoints[randomIndex];
-
+        int randomIndex = Random.Range(0,spawnPoints.Length);
+        Transform spawnPoint = spawnPoints[randomIndex];
+        
         Instantiate(flower, spawnPoint.position, spawnPoint.rotation);
+
+        flowerPosition = WorldToCanvasPosition(canvas1, camera1, spawnPoint.position);
+
+        Debug.Log("Flower position: " + flowerPosition.x + " , " + flowerPosition.y);
+        
+        
     }
-    
     void SpawnText()
     {
-        GameObject tempTextBox = (GameObject)Instantiate(flowerValueText, spawnPoint.position, spawnPoint.rotation);
-        //flowerText.transform.SetParent(Canvas.transform, false);
-        int randomNum = Random.Range(2,10);
-        flowerValue = randomNum;
-        
-        TextMesh theText = tempTextBox.transform.getComponent<TextMesh>();
-        theText.text = (randomNum.ToString() + " kg");
-        //Instantiate(flowerText, spawnPoint.position, spawnPoint.rotation);
-        //flowerText.text = (randomNum.ToString() + " kg");
-        
-        Debug.Log("Spawn text");
+
+        GameObject uiText = Instantiate(flowerValueText) as GameObject;
+        uiText.transform.SetParent(canvas.transform, false);
 
     }
+    private Vector2 WorldToCanvasPosition(RectTransform canvas, Camera camera, Vector3 position) 
+    {
+         //Vector position (percentage from 0 to 1) considering camera size.
+         //For example (0,0) is lower left, middle is (0.5,0.5)
+         Vector2 temp = camera.WorldToViewportPoint(position);
+ 
+         //Calculate position considering our percentage, using our canvas size
+         //So if canvas size is (1100,500), and percentage is (0.5,0.5), current value will be (550,250)
+         temp.x *= canvas.sizeDelta.x;
+         temp.y *= canvas.sizeDelta.y;
+         
+         //The result is ready, but, this result is correct if canvas recttransform pivot is 0,0 - left lower corner.
+         //But in reality its middle (0.5,0.5) by default, so we remove the amount considering cavnas rectransform pivot.
+         //We could multiply with constant 0.5, but we will actually read the value, so if custom rect transform is passed(with custom pivot) , 
+         //returned value will still be correct.
+         temp.x -= canvas.sizeDelta.x * canvas.pivot.x;
+         temp.y -= canvas.sizeDelta.y * canvas.pivot.y;
+ 
+         return temp;
+     }
+
+
+    
 }
-/*
-
-//Insert the empty game object with the TExtMesh attached
-public GameObject distanceText;
-
-//instantiates the object
-GameObject tempTextBox = (GameObject)Instantiate(distanceText,pos,rot);
-
-//grabs the textMesh component from the game object
-TextMesh theText = tempTextBox.transform.getComponent<TextMesh>();
-
-//sets the text
-theText.text = "The Text";
-
-*/

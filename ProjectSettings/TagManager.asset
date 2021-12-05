@@ -8,6 +8,24 @@ TagManager:
   - Guardian
   - Wasp
   - WoBee01
+  - Flower
+  - Hive
+  - Enemy
+  - BU01
+  - BU02
+  - BU03
+  - BU04
+  - BU05
+  - THU01
+  - THU02
+  - THU03
+  - THU04
+  - THU05
+  - FHU01
+  - FHU02
+  - FHU03
+  - FHU04
+  - FHU05
   layers:
   - Default
   - TransparentFX
@@ -23,8 +41,8 @@ TagManager:
   - ForestFloor
   - 
   - 
-  - 
-  - 
+  - FlowerText
+  - Clickable
   - 
   - 
   - 
@@ -42,15 +60,15 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Ground
+    uniqueID: 350306609
+    locked: 0
   - name: Default
     uniqueID: 0
-    locked: 0
-  - name: Spawns
-    uniqueID: 3887402953
     locked: 0
   - name: SpawnPoint
     uniqueID: 2181696881
     locked: 0
-  - name: Ground
-    uniqueID: 350306609
+  - name: Spawns
+    uniqueID: 3887402953
     locked: 0
