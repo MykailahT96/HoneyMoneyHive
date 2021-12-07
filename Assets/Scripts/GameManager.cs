@@ -11,7 +11,6 @@ public class GameManager : MonoBehaviour
 
     bool MarketWindowActive = false;
     public static bool GameIsPaused = false;
-    public GameObject bee;
 
     void Start()
     {
@@ -83,6 +82,12 @@ public class GameManager : MonoBehaviour
     public void ReturnToMainMenu()
     {
         SceneManager.LoadScene("MainMenu");
+    }
+
+    public void SaveGame()
+    {
+        //SaveSystem.SavePlayer(playerInventory);
+
     }
 }
 

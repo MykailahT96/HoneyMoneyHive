@@ -5,18 +5,11 @@ using UnityEngine.UI;
 
 public class Flower : MonoBehaviour
 {
-    public GameObject flowerValueText;//text prefab
-    //public GameObject flower;
-    //public Canvas canvas1;
-    //public Camera camera1;
-    public RectTransform flowerText;
     public int flowerHealth = 0;
-    public float posX = 0f;
-    public float posY = 0f;
     public int maxFlowerValue = 50;
     public int minFlowerValue = 10;
-    //private Inventory inventoryScript;
-    //public GameObject inventoryManager;
+    public RectTransform flowerText;
+    public float posX, posY;
 
     [SerializeField] private Text valueText;
     
@@ -26,21 +19,26 @@ public class Flower : MonoBehaviour
     {
 
         SetFlowerValue();
-        valueText.text = (flowerHealth.ToString() + " kg");
+        maxFlowerValue = PlayerPrefs.GetInt("flowerMax");
+        minFlowerValue = PlayerPrefs.GetInt("flowerMin");
+        //flowerPosition = WorldToCanvasPosition(flowerCanvas, camera, flower.position);
+        
+        //valueText.text = (flowerHealth.ToString() + " kg");
         //inventoryScript = inventoryManager.GetComponent<Inventory>();
         
     }
 
     void Update()
     {
+        valueText.text = (flowerHealth.ToString() + " kg");
 
+        flowerText.anchoredPosition = new Vector2(posX, posY);
     }
     public void SetFlowerValue()
     {
         
         int randomNum = Random.Range(minFlowerValue,maxFlowerValue);
         flowerHealth = randomNum;
-        flowerText.anchoredPosition = new Vector2(posX, posY);
         
         Debug.Log("Flower value: " + flowerHealth.ToString());
 
@@ -75,6 +73,21 @@ public class Flower : MonoBehaviour
         Destroy(gameObject);
     }
 
+    public void UpgradeValue(int newHealth)
+    {   
+        minFlowerValue = minFlowerValue + newHealth;
+        maxFlowerValue = maxFlowerValue + newHealth;
+        PlayerPrefs.SetInt("flowerMin", minFlowerValue);
+        PlayerPrefs.SetInt("flowerMax", maxFlowerValue);
+        Debug.Log("New flower value range: " + minFlowerValue + ", " + maxFlowerValue);
+    }
+    public void SetTextPosition(Vector2 flowerPosition)
+    {
+        posX = flowerPosition.x;
+        posY = flowerPosition.y;
+        //textPosition = new Vector2(flowerPosition.x, flowerPosition.y);
+        //flowerText.anchoredPosition = new Vector2(flowerPosition.x, flowerPosition.y - 40);
+    }
     private Vector2 WorldToCanvasPosition(RectTransform canvas, Camera camera, Vector3 position) 
     {
          //Vector position (percentage from 0 to 1) considering camera size.
@@ -94,10 +107,7 @@ public class Flower : MonoBehaviour
          temp.y -= canvas.sizeDelta.y * canvas.pivot.y;
  
          return temp;
-     }
-
-    
-
+    }
 }
 
 

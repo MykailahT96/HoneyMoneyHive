@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour
     public Rigidbody2D rb;
     public float waspSpeed = 0.05f;
     public Inventory inventoryScript;
+    public float selfDestructTimer = 10f;
 
    // public GameObject deathEffect;
     void Start()
@@ -20,6 +21,14 @@ public class Enemy : MonoBehaviour
     }
     void Update()
     {
+        if(selfDestructTimer > 0)
+        {
+            selfDestructTimer -= Time.deltaTime;
+        }
+        else
+        {
+            SelfDestruct();
+        }
         //rb.transform.position = new Vector3(transform.position.x + waspSpeed, transform.position.y);
     }
     public void TakeDamage(int damage)
@@ -45,6 +54,11 @@ public class Enemy : MonoBehaviour
     void Die()
     {
         //Instantiate(deatheffect, transform.position, Quaternion.identity);
+        Destroy(gameObject);
+        FindObjectOfType<Inventory>().AddKill();
+    }
+    void SelfDestruct()
+    {
         Destroy(gameObject);
     }
 

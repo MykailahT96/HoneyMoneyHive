@@ -16,15 +16,21 @@ public class FlowerSpawner : MonoBehaviour
     public RectTransform canvas1;
     //public RectTransform flowerText;
     public Vector2 flowerPosition;
+    public Flower flowerScript;
+    public int maxFlowerValue = 50;
+    public int minFlowerValue = 10;
     
 
-    public float spawnDelay = 10f;
-    float nextTimeToSpawn = 0f;
+    public float spawnDelay;
+    float nextTimeToSpawn = 5f;
 
     void Start()
     {
-        
-        
+        spawnDelay = 50f;
+        PlayerPrefs.SetFloat("spawnDelay", 50f);
+        Debug.Log("Current spawn rate: " + spawnDelay);
+        PlayerPrefs.SetInt("flowerMin", minFlowerValue);
+        PlayerPrefs.SetInt("flowerMax", maxFlowerValue);
 
     }
 
@@ -43,17 +49,27 @@ public class FlowerSpawner : MonoBehaviour
 
     void SpawnFlower()
     {
+        
         int randomIndex = Random.Range(0,spawnPoints.Length);
         Transform spawnPoint = spawnPoints[randomIndex];
-        
+        flowerScript.SetTextPosition(spawnPoint.position);
+        //FindObjectOfType<Flower>().SetTextPosition(spawnPoint.position);
+
         Instantiate(flower, spawnPoint.position, spawnPoint.rotation);
 
         flowerPosition = WorldToCanvasPosition(canvas1, camera1, spawnPoint.position);
-
+        //flowerScript.SetTextPosition(spawnPoint.position);
         Debug.Log("Flower position: " + flowerPosition.x + " , " + flowerPosition.y);
         
         
     }
+
+    public void UpgradeSpawnRate(float newDelay)
+    {
+        spawnDelay = spawnDelay - newDelay;
+        Debug.Log("New flower spawn rate: " + spawnDelay + " secs.");
+    }
+
     void SpawnText()
     {
 

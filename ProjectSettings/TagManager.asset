@@ -26,6 +26,15 @@ TagManager:
   - FHU03
   - FHU04
   - FHU05
+  - FSU01
+  - FSU02
+  - FSU03
+  - FSU04
+  - FSU05
+  - SP01
+  - SP02
+  - SP03
+  - SP04
   layers:
   - Default
   - TransparentFX
